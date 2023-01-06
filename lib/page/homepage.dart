@@ -119,7 +119,6 @@ class MainPage extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(17, 18, 0, 0),
                           child: SizedBox(
                             width: 313,
-                            height: 106,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -169,7 +168,6 @@ class MainPage extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(17, 18, 0, 0),
                           child: SizedBox(
                             width: 313,
-                            height: 106,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -221,7 +219,6 @@ class MainPage extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(17, 18, 0, 0),
                           child: SizedBox(
                             width: 313,
-                            height: 106,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -256,7 +253,7 @@ class MainPage extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, 'boy');
+                    Navigator.pushNamed(context, '/boy');
                   },
                   child: Container(
                     child: Column(
@@ -273,7 +270,6 @@ class MainPage extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(17, 18, 0, 0),
                           child: SizedBox(
                             width: 313,
-                            height: 106,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

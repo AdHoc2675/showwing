@@ -77,3 +77,20 @@ TextStyle Noto_Body2_Large() {
     fontWeight: FontWeight.w400,
   );
 }
+
+TextStyle Lora_Body_Semibold() {
+  return GoogleFonts.lora(
+    fontSize: 16,
+    height: 24 / 16,
+    letterSpacing: 0.5,
+    fontWeight: FontWeight.w600,
+  );
+}
+
+TextStyle Inter() {
+  return GoogleFonts.inter(
+    fontSize: 14,
+    height: 30 / 14,
+    fontWeight: FontWeight.w300,
+  );
+}
