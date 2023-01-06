@@ -92,12 +92,15 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                           style: Noto_Label_Large(),
                         ),
                       ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.width / 8,
-                        width: MediaQuery.of(context).size.width / 8,
-                        child: Image.file(
-                          File(imagePath),
-                          fit: BoxFit.fitWidth,
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
                         ),
                       ),
                     ],
@@ -105,18 +108,18 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Sea",
-                            style: Noto_Label_Large(),
-                          ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Sea",
+                          style: Noto_Label_Large(),
                         ),
-                        SizedBox(
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
                           child: Image.file(
@@ -124,24 +127,24 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Mood",
-                            style: Noto_Label_Large(),
-                          ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Mood",
+                          style: Noto_Label_Large(),
                         ),
-                        SizedBox(
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
                           child: Image.file(
@@ -149,24 +152,24 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Natuer",
-                            style: Noto_Label_Large(),
-                          ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Natuer",
+                          style: Noto_Label_Large(),
                         ),
-                        SizedBox(
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
                           child: Image.file(
@@ -174,24 +177,24 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Insta",
-                            style: Noto_Label_Large(),
-                          ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Insta",
+                          style: Noto_Label_Large(),
                         ),
-                        SizedBox(
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
                           child: Image.file(
@@ -199,24 +202,24 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Example",
-                            style: Noto_Label_Large(),
-                          ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Example",
+                          style: Noto_Label_Large(),
                         ),
-                        SizedBox(
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
                           child: Image.file(
@@ -224,24 +227,24 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {},
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            "Example2",
-                            style: Noto_Label_Large(),
-                          ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Example2",
+                          style: Noto_Label_Large(),
                         ),
-                        SizedBox(
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
                           child: Image.file(
@@ -249,8 +252,8 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
                             fit: BoxFit.fitWidth,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ],
