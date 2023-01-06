@@ -83,73 +83,73 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
               children: [
                 Column(
                   children: [
-                    Text("data"),
+                    Text(
+                      "Selfie",
+                      style: Noto_Label_Large(),
+                    ),
                     Icon(
                       Icons.rectangle,
-                      size: 60,
+                      size: 70,
                     )
                   ],
                 ),
                 Column(
                   children: [
-                    Text("data"),
+                    Text(
+                      "Sea",
+                      style: Noto_Label_Large(),
+                    ),
                     Icon(
                       Icons.rectangle,
-                      size: 60,
+                      size: 70,
                     )
                   ],
                 ),
                 Column(
                   children: [
-                    Text("data"),
+                    Text(
+                      "Mood",
+                      style: Noto_Label_Large(),
+                    ),
                     Icon(
                       Icons.rectangle,
-                      size: 60,
+                      size: 70,
                     )
                   ],
                 ),
                 Column(
                   children: [
-                    Text("data"),
+                    Text(
+                      "Natuer",
+                      style: Noto_Label_Large(),
+                    ),
                     Icon(
                       Icons.rectangle,
-                      size: 60,
+                      size: 70,
                     )
                   ],
                 ),
                 Column(
                   children: [
-                    Text("data"),
+                    Text(
+                      "Insta",
+                      style: Noto_Label_Large(),
+                    ),
                     Icon(
                       Icons.rectangle,
-                      size: 60,
+                      size: 70,
                     )
                   ],
                 ),
                 Column(
                   children: [
-                    Text("data"),
+                    Text(
+                      "Example",
+                      style: Noto_Label_Large(),
+                    ),
                     Icon(
                       Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
+                      size: 70,
                     )
                   ],
                 ),
