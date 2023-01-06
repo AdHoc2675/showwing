@@ -76,82 +76,185 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
             child: Image.file(File(imagePath)),
           )),
           SizedBox(
-            height: 100,
+            height: MediaQuery.of(context).size.height / 9,
             width: MediaQuery.of(context).size.width - 50,
             child: ListView(
               scrollDirection: Axis.horizontal,
               children: [
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Selfie",
+                          style: Noto_Label_Large(),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Sea",
+                          style: Noto_Label_Large(),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Mood",
+                          style: Noto_Label_Large(),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Natuer",
+                          style: Noto_Label_Large(),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Insta",
+                          style: Noto_Label_Large(),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Example",
+                          style: Noto_Label_Large(),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text(
+                          "Example2",
+                          style: Noto_Label_Large(),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.width / 8,
+                          width: MediaQuery.of(context).size.width / 8,
+                          child: Image.file(
+                            File(imagePath),
+                            fit: BoxFit.fitWidth,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
