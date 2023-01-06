@@ -65,6 +65,7 @@ flutter:
   assets:
     - assets/images/hwamin.png
     - assets/images/hwamin1.png
+    - assets/images/hwamin1outline.png
     - assets/images/hwamin2.png
     - assets/images/hwamin3.png
     - assets/images/hwamin4.png

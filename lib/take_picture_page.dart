@@ -40,19 +40,19 @@ class TakePicturePageState extends State<TakePicturePage>
 
   bool valueforcommit = false;
 
-  File? _image;
+  File? _imageFromGallery;
   final picker = ImagePicker();
 
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
 
     setState(() {
-      _image = File(image!.path); // 가져온 이미지를 _image에 저장
+      _imageFromGallery = File(image!.path); // 가져온 이미지를 _imageFromGallery에 저장
     });
   }
 
   Widget showImage() {
-    return _image == null
+    return _imageFromGallery == null
         ? Text(' ')
         : isImageInVisible
             ? Text('')
@@ -65,7 +65,7 @@ class TakePicturePageState extends State<TakePicturePage>
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
                           Colors.black.withOpacity(0.5), BlendMode.dstATop),
-                      image: FileImage(_image!),
+                      image: FileImage(_imageFromGallery!),
                     ),
                   ),
                 ),
