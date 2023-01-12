@@ -12,20 +12,20 @@ import 'theme/color_schemes.dart';
 import 'theme/font.dart';
 import 'display_and_save_image_page.dart';
 
-class TakePicturePage extends StatefulWidget {
+class TakePicturePage2 extends StatefulWidget {
   @override
-  TakePicturePageState createState() => TakePicturePageState();
+  TakePicturePage2State createState() => TakePicturePage2State();
 }
 
-class TakePicturePageState extends State<TakePicturePage>
+class TakePicturePage2State extends State<TakePicturePage2>
     with WidgetsBindingObserver {
   CameraController? controller;
   bool _isCameraInitialized = false;
   final resolutionPresets = ResolutionPreset.values;
   ResolutionPreset currentResolutionPreset = ResolutionPreset.high;
 
-  double _minAvailableZoom = 0.5;
-  double _maxAvailableZoom = 10.0;
+  double _minAvailableZoom = 1.0;
+  double _maxAvailableZoom = 5.0;
   double _currentZoomLevel = 1.0;
 
   double _minAvailableExposureOffset = 0.0;
@@ -42,8 +42,6 @@ class TakePicturePageState extends State<TakePicturePage>
 
   File? _imageFromGallery;
   final picker = ImagePicker();
-
-  double _currentImageOpacity = 0.5;
 
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
@@ -66,8 +64,7 @@ class TakePicturePageState extends State<TakePicturePage>
                     image: DecorationImage(
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(_currentImageOpacity),
-                          BlendMode.dstATop),
+                          Colors.black.withOpacity(0.5), BlendMode.dstATop),
                       image: FileImage(_imageFromGallery!),
                     ),
                   ),
@@ -321,37 +318,6 @@ class TakePicturePageState extends State<TakePicturePage>
                                 Image.asset('assets/images/reset_image.png'),
                               ],
                             )),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Slider(
-                                value: _currentImageOpacity,
-                                min: 0,
-                                max: 1,
-                                activeColor: Colors.white,
-                                inactiveColor: Colors.white30,
-                                onChanged: (value) async {
-                                  setState(() {
-                                    _currentImageOpacity = value;
-                                  });
-                                },
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black87,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  _currentZoomLevel.toStringAsFixed(1) + 'x',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
 
                         // Camera Zoom Controller
                         Row(
@@ -535,8 +501,6 @@ class TakePicturePageState extends State<TakePicturePage>
                           final image = await controller!.takePicture();
 
                           if (!mounted) return;
-
-                          controller!.setFlashMode(FlashMode.off);
 
                           // If the picture was taken, display it on a new screen.
                           await Navigator.of(context).push(

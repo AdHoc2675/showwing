@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:showwing/theme/font.dart';
 import 'package:showwing/photo/photolist.dart';
 
+import '../take_pictuer_page2.dart';
 import '../take_picture_page.dart';
 
 class HwaminPage extends StatefulWidget {
@@ -42,7 +43,7 @@ class _HwaminPageState extends State<HwaminPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => TakePicturePage(),
+                          builder: (context) => TakePicturePage2(),
                         ),
                       );
                     }),
