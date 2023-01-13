@@ -5,6 +5,7 @@ import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:showwing/theme/font.dart';
 
+import 'image_save_page.dart';
 import 'page/homepage.dart';
 
 class ImageEditPage extends StatefulWidget {
@@ -48,7 +49,7 @@ class ImageEditPageState extends State<ImageEditPage> {
         ),
         title: Center(
           child: Text(
-            '',
+            'Filter',
             style: Lora_Body_Large(),
           ),
         ),
@@ -61,8 +62,18 @@ class ImageEditPageState extends State<ImageEditPage> {
                   .catchError((err) {
                 print('error :( $err');
               });
+
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ImageSavePage(
+                    // Pass the automatically generated path to
+                    // the DisplayPictureScreen widget.
+                    imagePath: this.imagePath,
+                  ),
+                ),
+              );
             },
-            icon: Icon(Icons.save),
+            icon: Icon(Icons.check),
           )
         ],
       ),

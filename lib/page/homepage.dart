@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:showwing/theme/font.dart';
 
-import '../display_and_save_image_page.dart';
+import '../image_edit_page.dart';
 import '../take_picture_page.dart';
 
 class MainPage extends StatefulWidget {
