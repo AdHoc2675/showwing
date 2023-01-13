@@ -7,16 +7,16 @@ import 'package:showwing/theme/font.dart';
 
 import 'page/homepage.dart';
 
-class DisplayAndSaveImagePage extends StatefulWidget {
-  const DisplayAndSaveImagePage({super.key, required this.imagePath});
+class ImageEditPage extends StatefulWidget {
+  const ImageEditPage({super.key, required this.imagePath});
   final String imagePath;
 
-  DisplayAndSaveImagePageState createState() =>
-      DisplayAndSaveImagePageState(imagePath: this.imagePath);
+  ImageEditPageState createState() =>
+      ImageEditPageState(imagePath: this.imagePath);
 }
 
-class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
-  DisplayAndSaveImagePageState({
+class ImageEditPageState extends State<ImageEditPage> {
+  ImageEditPageState({
     Key? key,
     required this.imagePath,
   });

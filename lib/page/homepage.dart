@@ -55,7 +55,7 @@ class MainPageState extends State<MainPage> {
                       await picker.pickImage(source: ImageSource.gallery);
                   await Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => DisplayAndSaveImagePage(
+                      builder: (context) => ImageEditPage(
                         // Pass the automatically generated path to
                         // the DisplayPictureScreen widget.
                         imagePath: image!.path,
