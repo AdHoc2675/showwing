@@ -10,7 +10,7 @@ import 'main.dart';
 import 'page/homepage.dart';
 import 'theme/color_schemes.dart';
 import 'theme/font.dart';
-import 'display_and_save_image_page.dart';
+import 'image_edit_page.dart';
 
 class TakePicturePage2 extends StatefulWidget {
   @override
