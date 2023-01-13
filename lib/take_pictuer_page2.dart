@@ -505,7 +505,7 @@ class TakePicturePage2State extends State<TakePicturePage2>
                           // If the picture was taken, display it on a new screen.
                           await Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => DisplayAndSaveImagePage(
+                              builder: (context) => ImageEditPage(
                                 // Pass the automatically generated path to
                                 // the DisplayPictureScreen widget.
                                 imagePath: image.path,
