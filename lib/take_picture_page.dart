@@ -5,6 +5,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:showwing/remove_bg_api_client..dart';
 
 import 'main.dart';
 import 'page/homepage.dart';
@@ -36,43 +37,70 @@ class TakePicturePageState extends State<TakePicturePage>
 
   bool _isRearCameraSelected = true;
 
-  bool isImageInVisible = false;
+  bool isImageInvisible = false;
 
   bool valueforcommit = false;
 
   File? _imageFromGallery;
   final picker = ImagePicker();
+  Uint8List? imageAsUint8List;
+  String? imagePathAsString;
+  bool isSilhouetteModeOn = false;
 
   double _currentImageOpacity = 0.5;
 
   Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
-
-    setState(() {
-      _imageFromGallery = File(image!.path); // 가져온 이미지를 _imageFromGallery에 저장
-    });
+    try {
+      final pickedImage = await picker.pickImage(source: imageSource);
+      if (pickedImage != null) {
+        setState(() async {
+          _imageFromGallery =
+              File(pickedImage!.path); // 가져온 이미지를 _imageFromGallery에 저장
+          imagePathAsString = pickedImage.path;
+          imageAsUint8List = await pickedImage.readAsBytes();
+        });
+      }
+    } catch (e) {
+      imageAsUint8List = null;
+    }
   }
 
   Widget showImage() {
     return _imageFromGallery == null
         ? Text(' ')
-        : isImageInVisible
-            ? Text('')
-            : Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.width,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(_currentImageOpacity),
-                          BlendMode.dstATop),
-                      image: FileImage(_imageFromGallery!),
+        : isImageInvisible
+            ? isSilhouetteModeOn
+                ? Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(_currentImageOpacity),
+                              BlendMode.srcIn),
+                          image: MemoryImage(imageAsUint8List!),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              );
+                  )
+                : Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.width,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(_currentImageOpacity),
+                              BlendMode.dstATop),
+                          image: MemoryImage(imageAsUint8List!),
+                        ),
+                      ),
+                    ),
+                  )
+            : Text('');
   }
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
@@ -138,7 +166,7 @@ class TakePicturePageState extends State<TakePicturePage>
 
     onNewCameraSelected(cameras[0]);
     super.initState();
-    isImageInVisible = false;
+    isImageInvisible = false;
   }
 
   @override
@@ -300,15 +328,15 @@ class TakePicturePageState extends State<TakePicturePage>
                             onTap: () {
                               print('hello');
                               setState(() {
-                                isImageInVisible = !isImageInVisible;
+                                isImageInvisible = !isImageInvisible;
                               });
                             },
                             hoverColor: Colors.transparent,
                             onHover: (value) {
                               setState(() {
-                                isImageInVisible = value;
+                                isImageInvisible = value;
                               });
-                              print(isImageInVisible);
+                              print(isImageInvisible);
                             },
                             child: Stack(
                               alignment: Alignment.center,
@@ -506,7 +534,13 @@ class TakePicturePageState extends State<TakePicturePage>
                   children: [
                     InkWell(
                       onTap: () async {
-                        getImage(ImageSource.gallery);
+                        await getImage(ImageSource.gallery)
+                            .then((value) => null);
+                        imageAsUint8List = await RemoveBGApiClient()
+                            .removeBgApi(imagePathAsString!);
+                        setState(() {
+                          isSilhouetteModeOn = true;
+                        });
                       },
                       child: Stack(
                         alignment: AlignmentDirectional.center,
