@@ -53,12 +53,11 @@ class TakePicturePageState extends State<TakePicturePage>
     try {
       final pickedImage = await picker.pickImage(source: imageSource);
       if (pickedImage != null) {
-        setState(() async {
-          _imageFromGallery =
-              File(pickedImage!.path); // 가져온 이미지를 _imageFromGallery에 저장
-          imagePathAsString = pickedImage.path;
-          imageAsUint8List = await pickedImage.readAsBytes();
-        });
+        _imageFromGallery =
+            File(pickedImage.path); // 가져온 이미지를 _imageFromGallery에 저장
+        imagePathAsString = pickedImage.path;
+        imageAsUint8List = await pickedImage.readAsBytes();
+        ;
       }
     } catch (e) {
       imageAsUint8List = null;
@@ -540,6 +539,7 @@ class TakePicturePageState extends State<TakePicturePage>
                             .removeBgApi(imagePathAsString!);
                         setState(() {
                           isSilhouetteModeOn = true;
+                          isImageInvisible = true;
                         });
                       },
                       child: Stack(
