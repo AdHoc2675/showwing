@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:showwing/take_picture_page.dart';
 
 import 'page/boy.dart';
 import 'page/din.dart';

@@ -79,11 +79,10 @@ TextStyle Lora_Body_Large() {
 
 TextStyle Noto_Body2_Large() {
   return GoogleFonts.notoSans(
-    fontSize: 13,
-    height: 23.8 / 13,
-    letterSpacing: 0.5,
-    fontWeight: FontWeight.w400,
-  );
+      fontSize: 13,
+      height: 23.8 / 13,
+      letterSpacing: 0.5,
+      fontWeight: FontWeight.w400);
 }
 
 TextStyle Lora_Body_Semibold() {
@@ -100,5 +99,14 @@ TextStyle Inter() {
     fontSize: 14,
     height: 30 / 14,
     fontWeight: FontWeight.w300,
+  );
+}
+
+TextStyle Lora() {
+  return GoogleFonts.lora(
+    fontSize: 12,
+    height: 24 / 12,
+    letterSpacing: 0.5,
+    fontWeight: FontWeight.w400,
   );
 }
