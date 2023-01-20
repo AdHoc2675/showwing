@@ -10,7 +10,6 @@ import '../take_picture_page.dart';
 import 'package:showwing/photo/mainlist.dart';
 
 class MainPage extends StatefulWidget {
-
   const MainPage({Key? key}) : super(key: key);
 
   @override
@@ -24,12 +23,6 @@ class MainPageState extends State<MainPage> {
 
   Future getImage(ImageSource imageSource) async {}
 
-
-  @override
-  State<MainPage> createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
