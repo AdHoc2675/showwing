@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
 import 'package:showwing/theme/font.dart';
+import 'package:photofilters/photofilters.dart';
+import 'package:image/image.dart' as imageLib;
 
 import 'image_save_page.dart';
 import 'page/homepage.dart';
@@ -26,10 +29,9 @@ class ImageEditPageState extends State<ImageEditPage> {
   final String albumName = 'Media';
 
   File? _image;
-  final picker = ImagePicker();
 
   Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
+    final image = await ImagePicker().pickImage(source: imageSource);
 
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
@@ -40,6 +42,7 @@ class ImageEditPageState extends State<ImageEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.0,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -158,9 +161,33 @@ class ImageEditPageState extends State<ImageEditPage> {
                         child: SizedBox(
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
+                          child: ColorFiltered(
+                            colorFilter: ColorFilter.matrix([
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                              0.0,
+                            ]),
+                            child: Image.file(
+                              File(imagePath),
+                              fit: BoxFit.fitWidth,
+                            ),
                           ),
                         ),
                       ),

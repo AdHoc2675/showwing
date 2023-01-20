@@ -39,6 +39,7 @@ class ImageSavePageState extends State<ImageSavePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.0,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -62,7 +63,18 @@ class ImageSavePageState extends State<ImageSavePage> {
                 ),
               );
             },
-            icon: Icon(Icons.home_filled),
+            icon: Column(
+              children: [
+                Icon(
+                  Icons.check,
+                  size: 28.5,
+                ),
+                Text(
+                  "finish",
+                  style: Lora_Label_Small(),
+                ),
+              ],
+            ),
           )
         ],
       ),

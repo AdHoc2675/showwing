@@ -19,6 +19,7 @@ class _HwaminPageState extends State<HwaminPage> {
 
     return Scaffold(
       appBar: AppBar(
+          toolbarHeight: 60.0,
           leading: Padding(
               padding: const EdgeInsets.only(left: 20.92),
               child: IconButton(

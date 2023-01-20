@@ -205,6 +205,7 @@ class TakePicturePage2State extends State<TakePicturePage2>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.0,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

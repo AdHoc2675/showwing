@@ -23,6 +23,7 @@ class MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.0,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         leading: Padding(
