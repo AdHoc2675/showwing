@@ -1,4 +1,6 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class PhotoModel {
   const PhotoModel(this.image, this.title, this.desc1, this.desc2, this.season,
@@ -269,3 +271,51 @@ const boyPhoto = [
     '#시티팝 #생일케이크',
   )
 ];
+
+class newFilter extends StatefulWidget {
+  const newFilter({Key? key}) : super(key: key);
+
+  @override
+  State<newFilter> createState() => _newFilterState();
+}
+
+class _newFilterState extends State<newFilter> {
+  int activeIndex = 0;
+
+  List newFilter = [
+    'assets/images/main1.jpg',
+    'assets/images/main2.jpg',
+    'assets/images/main3.jpg'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        CarouselSlider(
+          options: CarouselOptions(
+              height: 299,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  activeIndex = index;
+                });
+              }),
+          items: [for (var item in newFilter) Image.asset(item)].toList(),
+        ),
+        Positioned(
+            top: 280,
+            left: 130,
+            child: Container(
+                margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
+                child: AnimatedSmoothIndicator(
+                    activeIndex: activeIndex,
+                    count: newFilter.length,
+                    effect: ScrollingDotsEffect(
+                      activeDotColor: Colors.black,
+                      dotWidth: 8,
+                      dotHeight: 8,
+                    )))),
+      ],
+    );
+  }
+}
