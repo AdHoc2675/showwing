@@ -15,6 +15,7 @@ class _BoyPageState extends State<BoyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          toolbarHeight: 60.0,
           leading: Padding(
               padding: const EdgeInsets.only(left: 20.92),
               child: IconButton(

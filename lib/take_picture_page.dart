@@ -235,6 +235,7 @@ class TakePicturePageState extends State<TakePicturePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.0,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -541,6 +542,7 @@ class TakePicturePageState extends State<TakePicturePage>
                           isSilhouetteModeOn = true;
                           isImageInvisible = true;
                         });
+                        print(isImageInvisible);
                       },
                       child: Stack(
                         alignment: AlignmentDirectional.center,
