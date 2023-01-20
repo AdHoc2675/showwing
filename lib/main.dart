@@ -37,7 +37,7 @@ class Showing extends StatelessWidget {
       theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
       initialRoute: '/',
       routes: {
-        '/': (BuildContext context) => const MainPage(),
+        '/': (BuildContext context) => MainPage(),
         '/hwamin': (BuildContext context) => const HwaminPage(),
         '/ming': (BuildContext context) => const MingPage(),
         '/okio': (BuildContext context) => const OkioPage(),

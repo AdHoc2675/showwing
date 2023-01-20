@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:showwing/theme/font.dart';
 import 'package:showwing/photo/photolist.dart';
 
+import '../take_pictuer_page2.dart';
+import '../take_picture_page.dart';
+
 class HwaminPage extends StatefulWidget {
   const HwaminPage({Key? key}) : super(key: key);
 
@@ -16,6 +19,7 @@ class _HwaminPageState extends State<HwaminPage> {
 
     return Scaffold(
       appBar: AppBar(
+          toolbarHeight: 60.0,
           leading: Padding(
               padding: const EdgeInsets.only(left: 20.92),
               child: IconButton(
@@ -36,7 +40,14 @@ class _HwaminPageState extends State<HwaminPage> {
                       hwaminPhoto[itemIndex].image,
                       fit: BoxFit.fill,
                     ),
-                    onTap: () {}),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TakePicturePage2(),
+                        ),
+                      );
+                    }),
               ),
               const SizedBox(height: 21),
               SizedBox(

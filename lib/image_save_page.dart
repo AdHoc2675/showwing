@@ -7,16 +7,16 @@ import 'package:showwing/theme/font.dart';
 
 import 'page/homepage.dart';
 
-class DisplayAndSaveImagePage extends StatefulWidget {
-  const DisplayAndSaveImagePage({super.key, required this.imagePath});
+class ImageSavePage extends StatefulWidget {
+  const ImageSavePage({super.key, required this.imagePath});
   final String imagePath;
 
-  DisplayAndSaveImagePageState createState() =>
-      DisplayAndSaveImagePageState(imagePath: this.imagePath);
+  ImageSavePageState createState() =>
+      ImageSavePageState(imagePath: this.imagePath);
 }
 
-class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
-  DisplayAndSaveImagePageState({
+class ImageSavePageState extends State<ImageSavePage> {
+  ImageSavePageState({
     Key? key,
     required this.imagePath,
   });
@@ -39,6 +39,7 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60.0,
         backgroundColor: Colors.white,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -48,7 +49,7 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
         ),
         title: Center(
           child: Text(
-            '',
+            'Saved',
             style: Lora_Body_Large(),
           ),
         ),
@@ -56,13 +57,24 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
           // Camera Front-Rear Controller
           IconButton(
             onPressed: () {
-              GallerySaver.saveImage(imagePath, albumName: albumName)
-                  .then((value) => print('>>>> save value= $value'))
-                  .catchError((err) {
-                print('error :( $err');
-              });
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => MainPage(),
+                ),
+              );
             },
-            icon: Icon(Icons.save),
+            icon: Column(
+              children: [
+                Icon(
+                  Icons.check,
+                  size: 28.5,
+                ),
+                Text(
+                  "finish",
+                  style: Lora_Label_Small(),
+                ),
+              ],
+            ),
           )
         ],
       ),
@@ -75,87 +87,6 @@ class DisplayAndSaveImagePageState extends State<DisplayAndSaveImagePage> {
             padding: const EdgeInsets.only(left: 35.0, right: 35.0, bottom: 10),
             child: Image.file(File(imagePath)),
           )),
-          SizedBox(
-            height: 100,
-            width: MediaQuery.of(context).size.width - 50,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    Text("data"),
-                    Icon(
-                      Icons.rectangle,
-                      size: 60,
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,

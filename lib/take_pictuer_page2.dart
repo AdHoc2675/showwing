@@ -5,7 +5,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:showwing/remove_bg_api_client..dart';
 
 import 'main.dart';
 import 'page/homepage.dart';
@@ -13,20 +12,20 @@ import 'theme/color_schemes.dart';
 import 'theme/font.dart';
 import 'image_edit_page.dart';
 
-class TakePicturePage extends StatefulWidget {
+class TakePicturePage2 extends StatefulWidget {
   @override
-  TakePicturePageState createState() => TakePicturePageState();
+  TakePicturePage2State createState() => TakePicturePage2State();
 }
 
-class TakePicturePageState extends State<TakePicturePage>
+class TakePicturePage2State extends State<TakePicturePage2>
     with WidgetsBindingObserver {
   CameraController? controller;
   bool _isCameraInitialized = false;
   final resolutionPresets = ResolutionPreset.values;
   ResolutionPreset currentResolutionPreset = ResolutionPreset.high;
 
-  double _minAvailableZoom = 0.5;
-  double _maxAvailableZoom = 10.0;
+  double _minAvailableZoom = 1.0;
+  double _maxAvailableZoom = 5.0;
   double _currentZoomLevel = 1.0;
 
   double _minAvailableExposureOffset = 0.0;
@@ -37,69 +36,40 @@ class TakePicturePageState extends State<TakePicturePage>
 
   bool _isRearCameraSelected = true;
 
-  bool isImageInvisible = false;
+  bool isImageInVisible = false;
 
   bool valueforcommit = false;
 
   File? _imageFromGallery;
   final picker = ImagePicker();
-  Uint8List? imageAsUint8List;
-  String? imagePathAsString;
-  bool isSilhouetteModeOn = false;
-
-  double _currentImageOpacity = 0.5;
 
   Future getImage(ImageSource imageSource) async {
-    try {
-      final pickedImage = await picker.pickImage(source: imageSource);
-      if (pickedImage != null) {
-        _imageFromGallery =
-            File(pickedImage.path); // 가져온 이미지를 _imageFromGallery에 저장
-        imagePathAsString = pickedImage.path;
-        imageAsUint8List = await pickedImage.readAsBytes();
-        ;
-      }
-    } catch (e) {
-      imageAsUint8List = null;
-    }
+    final image = await picker.pickImage(source: imageSource);
+
+    setState(() {
+      _imageFromGallery = File(image!.path); // 가져온 이미지를 _imageFromGallery에 저장
+    });
   }
 
   Widget showImage() {
     return _imageFromGallery == null
         ? Text(' ')
-        : isImageInvisible
-            ? isSilhouetteModeOn
-                ? Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(_currentImageOpacity),
-                              BlendMode.srcIn),
-                          image: MemoryImage(imageAsUint8List!),
-                        ),
-                      ),
+        : isImageInVisible
+            ? Text('')
+            : Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.width,
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.5), BlendMode.dstATop),
+                      image: FileImage(_imageFromGallery!),
                     ),
-                  )
-                : Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.width,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(_currentImageOpacity),
-                              BlendMode.dstATop),
-                          image: MemoryImage(imageAsUint8List!),
-                        ),
-                      ),
-                    ),
-                  )
-            : Text('');
+                  ),
+                ),
+              );
   }
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
@@ -165,7 +135,7 @@ class TakePicturePageState extends State<TakePicturePage>
 
     onNewCameraSelected(cameras[0]);
     super.initState();
-    isImageInvisible = false;
+    isImageInVisible = false;
   }
 
   @override
@@ -328,15 +298,15 @@ class TakePicturePageState extends State<TakePicturePage>
                             onTap: () {
                               print('hello');
                               setState(() {
-                                isImageInvisible = !isImageInvisible;
+                                isImageInVisible = !isImageInVisible;
                               });
                             },
                             hoverColor: Colors.transparent,
                             onHover: (value) {
                               setState(() {
-                                isImageInvisible = value;
+                                isImageInVisible = value;
                               });
-                              print(isImageInvisible);
+                              print(isImageInVisible);
                             },
                             child: Stack(
                               alignment: Alignment.center,
@@ -349,37 +319,6 @@ class TakePicturePageState extends State<TakePicturePage>
                                 Image.asset('assets/images/reset_image.png'),
                               ],
                             )),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Slider(
-                                value: _currentImageOpacity,
-                                min: 0,
-                                max: 1,
-                                activeColor: Colors.white,
-                                inactiveColor: Colors.white30,
-                                onChanged: (value) async {
-                                  setState(() {
-                                    _currentImageOpacity = value;
-                                  });
-                                },
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black87,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  _currentImageOpacity.toStringAsFixed(1) + 'x',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
 
                         // Camera Zoom Controller
                         Row(
@@ -534,15 +473,7 @@ class TakePicturePageState extends State<TakePicturePage>
                   children: [
                     InkWell(
                       onTap: () async {
-                        await getImage(ImageSource.gallery)
-                            .then((value) => null);
-                        imageAsUint8List = await RemoveBGApiClient()
-                            .removeBgApi(imagePathAsString!);
-                        setState(() {
-                          isSilhouetteModeOn = true;
-                          isImageInvisible = true;
-                        });
-                        print(isImageInvisible);
+                        getImage(ImageSource.gallery);
                       },
                       child: Stack(
                         alignment: AlignmentDirectional.center,
@@ -571,8 +502,6 @@ class TakePicturePageState extends State<TakePicturePage>
                           final image = await controller!.takePicture();
 
                           if (!mounted) return;
-
-                          controller!.setFlashMode(FlashMode.off);
 
                           // If the picture was taken, display it on a new screen.
                           await Navigator.of(context).push(

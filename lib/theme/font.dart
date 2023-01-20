@@ -61,6 +61,14 @@ TextStyle Lora_Label_Large() {
       fontWeight: FontWeight.w400);
 }
 
+TextStyle Lora_Label_Small() {
+  return GoogleFonts.lora(
+      fontSize: 10,
+      height: 10 / 10,
+      letterSpacing: 0.31,
+      fontWeight: FontWeight.w400);
+}
+
 TextStyle Lora_Body_Large() {
   return GoogleFonts.lora(
       fontSize: 16,

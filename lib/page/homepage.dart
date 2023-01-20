@@ -1,11 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:showwing/theme/font.dart';
+
 import '../photo/photolist.dart';
+import '../image_edit_page.dart';
 import '../take_picture_page.dart';
 import 'package:showwing/photo/mainlist.dart';
 
 class MainPage extends StatefulWidget {
+
   const MainPage({Key? key}) : super(key: key);
+
+  @override
+  MainPageState createState() => MainPageState();
+}
+
+class MainPageState extends State<MainPage> {
+  final picker = ImagePicker();
+
+  File? _imageFromGallery;
+
+  Future getImage(ImageSource imageSource) async {}
+
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -17,6 +35,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        toolbarHeight: 60.0,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         leading: Padding(
@@ -44,7 +63,19 @@ class _MainPageState extends State<MainPage> {
               padding: const EdgeInsets.only(right: 16.5),
               child: IconButton(
                 icon: const Icon(Icons.photo_outlined),
-                onPressed: () {},
+                onPressed: () async {
+                  final image =
+                      await picker.pickImage(source: ImageSource.gallery);
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ImageEditPage(
+                        // Pass the automatically generated path to
+                        // the DisplayPictureScreen widget.
+                        imagePath: image!.path,
+                      ),
+                    ),
+                  );
+                },
               )),
         ],
       ),
