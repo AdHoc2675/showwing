@@ -303,8 +303,8 @@ class _newFilterState extends State<newFilter> {
           items: [for (var item in newFilter) Image.asset(item)].toList(),
         ),
         Positioned(
-            top: 280,
-            left: 130,
+            top: 500,
+            left: MediaQuery.of(context).size.width / 3,
             child: Container(
                 margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 2.0),
                 child: AnimatedSmoothIndicator(
