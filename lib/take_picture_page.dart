@@ -25,9 +25,9 @@ class TakePicturePageState extends State<TakePicturePage>
   final resolutionPresets = ResolutionPreset.values;
   ResolutionPreset currentResolutionPreset = ResolutionPreset.high;
 
-  double _minAvailableZoom = 0.5;
-  double _maxAvailableZoom = 10.0;
-  double _currentZoomLevel = 1.0;
+  double _minAvailableZoom = 1.0;
+  double _maxAvailableZoom = 8.0;
+  double _currentZoomLevel = 1.1;
 
   double _minAvailableExposureOffset = 0.0;
   double _maxAvailableExposureOffset = 0.0;
@@ -282,7 +282,33 @@ class TakePicturePageState extends State<TakePicturePage>
                             Stack(
                               alignment: AlignmentDirectional.centerEnd,
                               children: [
-                                CameraPreview(controller!),
+                                // Camera Zoom Controller
+                                GestureDetector(
+                                    onHorizontalDragStart: (details) {
+                                      // print(details);
+                                    },
+                                    onHorizontalDragUpdate: (details) async {
+                                      setState(() {
+                                        if (_currentZoomLevel >
+                                                _minAvailableZoom &&
+                                            _currentZoomLevel <
+                                                _maxAvailableZoom) {
+                                          if (details.delta.dx > 0 &&
+                                              _currentZoomLevel < 7.95) {
+                                            _currentZoomLevel =
+                                                _currentZoomLevel + 0.05;
+                                          } else if (_currentZoomLevel > 1.05) {
+                                            _currentZoomLevel =
+                                                _currentZoomLevel - 0.05;
+                                          }
+                                        }
+                                      });
+                                      print(details.delta.dx);
+                                      print(_currentZoomLevel);
+                                      await controller!
+                                          .setZoomLevel(_currentZoomLevel);
+                                    },
+                                    child: CameraPreview(controller!)),
 
                                 //Camera Brightness Controller
                                 CameraBrightnessController(),
@@ -381,39 +407,6 @@ class TakePicturePageState extends State<TakePicturePage>
                           ],
                         ),
 
-                        // Camera Zoom Controller
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Slider(
-                                value: _currentZoomLevel,
-                                min: _minAvailableZoom,
-                                max: _maxAvailableZoom,
-                                activeColor: Colors.white,
-                                inactiveColor: Colors.white30,
-                                onChanged: (value) async {
-                                  setState(() {
-                                    _currentZoomLevel = value;
-                                  });
-                                  await controller!.setZoomLevel(value);
-                                },
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black87,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  _currentZoomLevel.toStringAsFixed(1) + 'x',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         // Camera Flash Mode
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,

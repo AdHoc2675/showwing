@@ -1,36 +1,44 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:share_plus/share_plus.dart';
+
 import 'package:showwing/theme/font.dart';
 
 import 'page/homepage.dart';
 
 class ImageSavePage extends StatefulWidget {
-  const ImageSavePage({super.key, required this.imagePath});
+  const ImageSavePage(
+      {super.key, required this.imagePath, required this.saveDate});
   final String imagePath;
+  final String saveDate;
 
+  @override
   ImageSavePageState createState() =>
-      ImageSavePageState(imagePath: this.imagePath);
+      ImageSavePageState(imagePath: this.imagePath, saveDate: this.saveDate);
 }
 
 class ImageSavePageState extends State<ImageSavePage> {
   ImageSavePageState({
     Key? key,
     required this.imagePath,
+    required this.saveDate,
   });
 
   final String imagePath;
+  final String saveDate;
   final String albumName = 'Media';
 
   File? _image;
+  XFile? _imageXFile;
   final picker = ImagePicker();
 
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
 
-    setState(() {
+    setState(() async {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
   }
@@ -91,40 +99,45 @@ class ImageSavePageState extends State<ImageSavePage> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                onTap: () async {
-                  getImage(ImageSource.gallery);
-                },
-                child: Stack(
-                  alignment: AlignmentDirectional.center,
-                  children: [
-                    Icon(
-                      Icons.circle,
-                      color: Colors.black45,
-                      size: 60,
-                    ),
-                    Icon(
-                      Icons.image,
-                      color: Colors.white,
-                    ),
-                  ],
-                ),
+              Text(
+                saveDate,
+                style: Noto_Body2_Large(),
               ),
               InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
                   child: SizedBox(
-                    width: 75,
-                    height: 75,
+                    width: 50,
+                    height: 50,
+                    child: Column(
+                      children: [
+                        Icon(MdiIcons.autoFix),
+                        Text(
+                          'Edit',
+                          style: Lora_Label_Small(),
+                        )
+                      ],
+                    ),
                   )),
               InkWell(
                   onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => MainPage()),
-                        (route) => false);
+                    _imageXFile = XFile(File(imagePath).path);
+                    Share.shareXFiles([_imageXFile!]);
                   },
-                  child: Image.asset('assets/images/showwing_logo.png')),
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Column(
+                      children: [
+                        Icon(Icons.ios_share),
+                        Text(
+                          'Share',
+                          style: Lora_Label_Small(),
+                        )
+                      ],
+                    ),
+                  )),
             ],
           ),
         ],

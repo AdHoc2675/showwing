@@ -7,6 +7,7 @@ import 'package:path/path.dart';
 import 'package:showwing/theme/font.dart';
 import 'package:photofilters/photofilters.dart';
 import 'package:image/image.dart' as imageLib;
+import 'package:intl/intl.dart';
 
 import 'image_save_page.dart';
 import 'page/homepage.dart';
@@ -27,6 +28,8 @@ class ImageEditPageState extends State<ImageEditPage> {
 
   final String imagePath;
   final String albumName = 'Media';
+
+  String dateFormat = DateFormat("HH:mm:ss\nyyyy/MM/DD").format(DateTime.now());
 
   File? _image;
 
@@ -60,6 +63,9 @@ class ImageEditPageState extends State<ImageEditPage> {
           // Camera Front-Rear Controller
           IconButton(
             onPressed: () {
+              dateFormat =
+                  DateFormat("HH:mm:ss\nyyyy/MM/DD").format(DateTime.now());
+
               GallerySaver.saveImage(imagePath, albumName: albumName)
                   .then((value) => print('>>>> save value= $value'))
                   .catchError((err) {
@@ -72,6 +78,7 @@ class ImageEditPageState extends State<ImageEditPage> {
                     // Pass the automatically generated path to
                     // the DisplayPictureScreen widget.
                     imagePath: this.imagePath,
+                    saveDate: this.dateFormat,
                   ),
                 ),
               );
