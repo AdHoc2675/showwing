@@ -158,10 +158,8 @@ class TakePicturePageState extends State<TakePicturePage>
   }
 
   @override
-  @override
   void initState() {
     // Hide the status bar
-    SystemChrome.setEnabledSystemUIOverlays([]);
 
     onNewCameraSelected(cameras[0]);
     super.initState();
@@ -195,23 +193,24 @@ class TakePicturePageState extends State<TakePicturePage>
   Widget CameraBrightnessController() {
     return Column(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              _currentExposureOffset.toStringAsFixed(1) + 'x',
-              style: TextStyle(color: Colors.black),
-            ),
-          ),
-        ),
+        // Container(
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     borderRadius: BorderRadius.circular(10.0),
+        //   ),
+        //   child: Padding(
+        //     padding: const EdgeInsets.all(8.0),
+        //     child: Text(
+        //       _currentExposureOffset.toStringAsFixed(1) + 'x',
+        //       style: TextStyle(color: Colors.black),
+        //     ),
+        //   ),
+        // ),
         RotatedBox(
           quarterTurns: 3,
           child: Container(
-            height: 30,
+            height: MediaQuery.of(context).size.width / 10,
+            width: MediaQuery.of(context).size.height / 2.5,
             child: Slider(
               value: _currentExposureOffset,
               min: _minAvailableExposureOffset,
@@ -225,6 +224,210 @@ class TakePicturePageState extends State<TakePicturePage>
                 await controller!.setExposureOffset(value);
               },
             ),
+          ),
+        ),
+        Icon(
+          Icons.light_mode_outlined,
+          color: Colors.white,
+        )
+      ],
+    );
+  }
+
+  Widget CameraResolutionController() {
+    return DropdownButton<ResolutionPreset>(
+      dropdownColor: Colors.black87,
+      underline: Container(),
+      value: currentResolutionPreset,
+      items: [
+        for (ResolutionPreset preset in resolutionPresets)
+          DropdownMenuItem(
+            child: Text(
+              preset.toString().split('.')[1].toUpperCase(),
+              style: TextStyle(color: Colors.white),
+            ),
+            value: preset,
+          )
+      ],
+      onChanged: (value) {
+        setState(() {
+          currentResolutionPreset = value!;
+          _isCameraInitialized = false;
+        });
+        onNewCameraSelected(controller!.description);
+      },
+      hint: Text("Select item"),
+    );
+  }
+
+  Widget ImageInvisibleAndOpacityController() {
+    return Column(
+      children: [
+        InkWell(
+            onTap: () {
+              setState(() {
+                isImageInvisible = !isImageInvisible;
+              });
+            },
+            hoverColor: Colors.transparent,
+            onHover: (value) {
+              setState(() {
+                isImageInvisible = value;
+              });
+              print(isImageInvisible);
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  Icons.circle,
+                  color: Colors.white60,
+                  size: 60,
+                ),
+                Image.asset('assets/images/reset_image.png'),
+              ],
+            )),
+        Row(
+          children: [
+            Expanded(
+              child: Slider(
+                value: _currentImageOpacity,
+                min: 0,
+                max: 1,
+                activeColor: Colors.white,
+                inactiveColor: Colors.white30,
+                onChanged: (value) async {
+                  setState(() {
+                    _currentImageOpacity = value;
+                  });
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  _currentImageOpacity.toStringAsFixed(1) + 'x',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget CameraFlashController() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        InkWell(
+          onTap: () async {
+            setState(() {
+              _currentFlashMode = FlashMode.off;
+            });
+            await controller!.setFlashMode(
+              FlashMode.off,
+            );
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Icon(
+                Icons.circle,
+                color: Colors.black45,
+                size: 50,
+              ),
+              Icon(
+                Icons.flash_off,
+                color: _currentFlashMode == FlashMode.off
+                    ? Colors.amber
+                    : Colors.white,
+              ),
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            setState(() {
+              _currentFlashMode = FlashMode.auto;
+            });
+            await controller!.setFlashMode(
+              FlashMode.auto,
+            );
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Icon(
+                Icons.circle,
+                color: Colors.black45,
+                size: 50,
+              ),
+              Icon(
+                Icons.flash_auto,
+                color: _currentFlashMode == FlashMode.auto
+                    ? Colors.amber
+                    : Colors.white,
+              ),
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            setState(() {
+              _currentFlashMode = FlashMode.always;
+            });
+            await controller!.setFlashMode(
+              FlashMode.always,
+            );
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Icon(
+                Icons.circle,
+                color: Colors.black45,
+                size: 50,
+              ),
+              Icon(
+                Icons.flash_on,
+                color: _currentFlashMode == FlashMode.always
+                    ? Colors.amber
+                    : Colors.white,
+              ),
+            ],
+          ),
+        ),
+        InkWell(
+          onTap: () async {
+            setState(() {
+              _currentFlashMode = FlashMode.torch;
+            });
+            await controller!.setFlashMode(
+              FlashMode.torch,
+            );
+          },
+          child: Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Icon(
+                Icons.circle,
+                color: Colors.black45,
+                size: 50,
+              ),
+              Icon(
+                Icons.highlight,
+                color: _currentFlashMode == FlashMode.torch
+                    ? Colors.amber
+                    : Colors.white,
+              ),
+            ],
           ),
         ),
       ],
@@ -243,13 +446,17 @@ class TakePicturePageState extends State<TakePicturePage>
             Navigator.pop(context);
           },
         ),
-        title: Center(
-          child: Text(
-            '',
-            style: Lora_Body_Large(),
-          ),
-        ),
         actions: [
+          //TODO: CameraResolutionController
+          IconButton(
+              onPressed: () {
+                CameraResolutionController();
+              },
+              icon: Icon(Icons.high_quality_outlined)),
+          //TODO: ImageInvisibleAndOpacityController
+          IconButton(onPressed: () {}, icon: Icon(Icons.opacity)),
+          //TODO: Camera Flash Controller
+          IconButton(onPressed: () {}, icon: Icon(Icons.flash_on)),
           // Camera Front-Rear Controller
           IconButton(
             icon: const Icon(Icons.flip_camera_ios_outlined),
@@ -268,339 +475,166 @@ class TakePicturePageState extends State<TakePicturePage>
         ],
       ),
       body: _isCameraInitialized
-          ? Column(
-              children: [
-                Stack(
-                  alignment: AlignmentDirectional.bottomEnd,
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.center,
-                      children: [
-                        Stack(
-                          alignment: AlignmentDirectional.topEnd,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.centerEnd,
-                              children: [
-                                // Camera Zoom Controller
-                                GestureDetector(
-                                    onHorizontalDragStart: (details) {
-                                      // print(details);
-                                    },
-                                    onHorizontalDragUpdate: (details) async {
-                                      setState(() {
-                                        if (_currentZoomLevel >
-                                                _minAvailableZoom &&
-                                            _currentZoomLevel <
-                                                _maxAvailableZoom) {
-                                          if (details.delta.dx > 0 &&
-                                              _currentZoomLevel < 7.95) {
-                                            _currentZoomLevel =
-                                                _currentZoomLevel + 0.05;
-                                          } else if (_currentZoomLevel > 1.05) {
-                                            _currentZoomLevel =
-                                                _currentZoomLevel - 0.05;
-                                          }
-                                        }
-                                      });
-                                      print(details.delta.dx);
-                                      print(_currentZoomLevel);
-                                      await controller!
-                                          .setZoomLevel(_currentZoomLevel);
-                                    },
-                                    child: CameraPreview(controller!)),
-
-                                //Camera Brightness Controller
-                                CameraBrightnessController(),
-                              ],
-                            ),
-
-                            // Camera Resolution Controller
-                            DropdownButton<ResolutionPreset>(
-                              dropdownColor: Colors.black87,
-                              underline: Container(),
-                              value: currentResolutionPreset,
-                              items: [
-                                for (ResolutionPreset preset
-                                    in resolutionPresets)
-                                  DropdownMenuItem(
-                                    child: Text(
-                                      preset
-                                          .toString()
-                                          .split('.')[1]
-                                          .toUpperCase(),
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    value: preset,
-                                  )
-                              ],
-                              onChanged: (value) {
-                                setState(() {
-                                  currentResolutionPreset = value!;
-                                  _isCameraInitialized = false;
-                                });
-                                onNewCameraSelected(controller!.description);
-                              },
-                              hint: Text("Select item"),
-                            ),
-                          ],
-                        ),
-                        showImage(),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              print('hello');
-                              setState(() {
-                                isImageInvisible = !isImageInvisible;
-                              });
-                            },
-                            hoverColor: Colors.transparent,
-                            onHover: (value) {
-                              setState(() {
-                                isImageInvisible = value;
-                              });
-                              print(isImageInvisible);
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Icon(
-                                  Icons.circle,
-                                  color: Colors.white60,
-                                  size: 60,
-                                ),
-                                Image.asset('assets/images/reset_image.png'),
-                              ],
-                            )),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Slider(
-                                value: _currentImageOpacity,
-                                min: 0,
-                                max: 1,
-                                activeColor: Colors.white,
-                                inactiveColor: Colors.white30,
-                                onChanged: (value) async {
-                                  setState(() {
-                                    _currentImageOpacity = value;
-                                  });
-                                },
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.black87,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  _currentImageOpacity.toStringAsFixed(1) + 'x',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        // Camera Flash Mode
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  _currentFlashMode = FlashMode.off;
-                                });
-                                await controller!.setFlashMode(
-                                  FlashMode.off,
-                                );
-                              },
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    color: Colors.black45,
-                                    size: 50,
-                                  ),
-                                  Icon(
-                                    Icons.flash_off,
-                                    color: _currentFlashMode == FlashMode.off
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  _currentFlashMode = FlashMode.auto;
-                                });
-                                await controller!.setFlashMode(
-                                  FlashMode.auto,
-                                );
-                              },
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    color: Colors.black45,
-                                    size: 50,
-                                  ),
-                                  Icon(
-                                    Icons.flash_auto,
-                                    color: _currentFlashMode == FlashMode.auto
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  _currentFlashMode = FlashMode.always;
-                                });
-                                await controller!.setFlashMode(
-                                  FlashMode.always,
-                                );
-                              },
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    color: Colors.black45,
-                                    size: 50,
-                                  ),
-                                  Icon(
-                                    Icons.flash_on,
-                                    color: _currentFlashMode == FlashMode.always
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () async {
-                                setState(() {
-                                  _currentFlashMode = FlashMode.torch;
-                                });
-                                await controller!.setFlashMode(
-                                  FlashMode.torch,
-                                );
-                              },
-                              child: Stack(
-                                alignment: AlignmentDirectional.center,
-                                children: [
-                                  Icon(
-                                    Icons.circle,
-                                    color: Colors.black45,
-                                    size: 50,
-                                  ),
-                                  Icon(
-                                    Icons.highlight,
-                                    color: _currentFlashMode == FlashMode.torch
-                                        ? Colors.amber
-                                        : Colors.white,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        await getImage(ImageSource.gallery)
-                            .then((value) => null);
-                        imageAsUint8List = await RemoveBGApiClient()
-                            .removeBgApi(imagePathAsString!);
-                        setState(() {
-                          isSilhouetteModeOn = true;
-                          isImageInvisible = true;
-                        });
-                        print(isImageInvisible);
-                      },
-                      child: Stack(
+          ? Center(
+              child: Column(
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.bottomEnd,
+                    children: [
+                      Stack(
                         alignment: AlignmentDirectional.center,
                         children: [
-                          Icon(
-                            Icons.circle,
-                            color: Colors.black45,
-                            size: 60,
+                          Stack(
+                            alignment: AlignmentDirectional.topEnd,
+                            children: [
+                              Stack(
+                                alignment: AlignmentDirectional.centerEnd,
+                                children: [
+                                  // Camera Zoom Controller
+                                  GestureDetector(
+                                      onScaleStart: (details) {},
+                                      onScaleUpdate: (details) async {
+                                        setState(() {
+                                          if (_currentZoomLevel >
+                                                  _minAvailableZoom &&
+                                              _currentZoomLevel <
+                                                  _maxAvailableZoom) {
+                                            if (details.scale > 1 &&
+                                                _currentZoomLevel < 7.975) {
+                                              _currentZoomLevel =
+                                                  _currentZoomLevel + 0.025;
+                                            } else if (_currentZoomLevel >
+                                                1.025) {
+                                              _currentZoomLevel =
+                                                  _currentZoomLevel - 0.025;
+                                            }
+                                          }
+                                        });
+                                        await controller!
+                                            .setZoomLevel(_currentZoomLevel);
+                                      },
+                                      child: SizedBox(
+                                          child: CameraPreview(controller!))),
+
+                                  //Camera Brightness Controller
+                                  CameraBrightnessController(),
+                                ],
+                              ),
+
+                              // Camera Resolution Controller
+                              CameraResolutionController(),
+                            ],
                           ),
-                          Icon(
-                            Icons.image,
-                            color: Colors.white,
+                          showImage(),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                _currentZoomLevel.toStringAsFixed(1) + 'x',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          // Image Invisible And Opacity Controller
+                          ImageInvisibleAndOpacityController(),
+
+                          // Camera Flash Controller
+                          CameraFlashController(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  await getImage(ImageSource.gallery)
+                                      .then((value) => null);
+                                  imageAsUint8List = await RemoveBGApiClient()
+                                      .removeBgApi(imagePathAsString!);
+                                  setState(() {
+                                    isSilhouetteModeOn = true;
+                                    isImageInvisible = true;
+                                  });
+                                  print(isImageInvisible);
+                                },
+                                child: Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    Icon(
+                                      Icons.circle,
+                                      color: Colors.black45,
+                                      size: 60,
+                                    ),
+                                    Icon(
+                                      Icons.image,
+                                      color: Colors.white,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  // Take the Picture in a try / catch block. If anything goes wrong,
+                                  // catch the error.
+                                  try {
+                                    // Ensure that the camera is initialized.
+
+                                    // Attempt to take a picture and get the file `image`
+                                    // where it was saved.
+                                    final image =
+                                        await controller!.takePicture();
+
+                                    if (!mounted) return;
+
+                                    controller!.setFlashMode(FlashMode.off);
+
+                                    // If the picture was taken, display it on a new screen.
+                                    await Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => ImageEditPage(
+                                          // Pass the automatically generated path to
+                                          // the DisplayPictureScreen widget.
+                                          imagePath: image.path,
+                                        ),
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    // If an error occurs, log the error to the console.
+                                    print(e);
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.circle,
+                                  color: Colors.black45,
+                                  size: 75,
+                                ),
+                              ),
+                              InkWell(
+                                  onTap: () {
+                                    Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (BuildContext context) =>
+                                                MainPage()),
+                                        (route) => false);
+                                  },
+                                  child: Image.asset(
+                                      'assets/images/showwing_logo.png')),
+                            ],
                           ),
                         ],
                       ),
-                    ),
-                    InkWell(
-                      onTap: () async {
-                        // Take the Picture in a try / catch block. If anything goes wrong,
-                        // catch the error.
-                        try {
-                          // Ensure that the camera is initialized.
-
-                          // Attempt to take a picture and get the file `image`
-                          // where it was saved.
-                          final image = await controller!.takePicture();
-
-                          if (!mounted) return;
-
-                          controller!.setFlashMode(FlashMode.off);
-
-                          // If the picture was taken, display it on a new screen.
-                          await Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ImageEditPage(
-                                // Pass the automatically generated path to
-                                // the DisplayPictureScreen widget.
-                                imagePath: image.path,
-                              ),
-                            ),
-                          );
-                        } catch (e) {
-                          // If an error occurs, log the error to the console.
-                          print(e);
-                        }
-                      },
-                      child: Icon(
-                        Icons.circle,
-                        color: Colors.black45,
-                        size: 75,
-                      ),
-                    ),
-                    InkWell(
-                        onTap: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      MainPage()),
-                              (route) => false);
-                        },
-                        child: Image.asset('assets/images/showwing_logo.png')),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             )
           : Container(),
     );
