@@ -128,7 +128,6 @@ class TakePicturePage2State extends State<TakePicturePage2>
   }
 
   @override
-  @override
   void initState() {
     // Hide the status bar
     SystemChrome.setEnabledSystemUIOverlays([]);
