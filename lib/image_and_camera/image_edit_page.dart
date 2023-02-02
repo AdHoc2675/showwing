@@ -10,7 +10,7 @@ import 'package:image/image.dart' as imageLib;
 import 'package:intl/intl.dart';
 
 import 'image_save_page.dart';
-import 'page/homepage.dart';
+import '../page/homepage.dart';
 
 class ImageEditPage extends StatefulWidget {
   const ImageEditPage({super.key, required this.imagePath});
@@ -169,28 +169,8 @@ class ImageEditPageState extends State<ImageEditPage> {
                           height: MediaQuery.of(context).size.width / 8,
                           width: MediaQuery.of(context).size.width / 8,
                           child: ColorFiltered(
-                            colorFilter: ColorFilter.matrix([
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                              0.0,
-                            ]),
+                            colorFilter:
+                                ColorFilter.mode(Colors.black, BlendMode.color),
                             child: Image.file(
                               File(imagePath),
                               fit: BoxFit.fitWidth,

@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'main.dart';
-import 'page/homepage.dart';
-import 'theme/color_schemes.dart';
-import 'theme/font.dart';
+import '../main.dart';
+import '../page/homepage.dart';
+import '../theme/color_schemes.dart';
+import '../theme/font.dart';
 import 'image_edit_page.dart';
 
 class TakePicturePage2 extends StatefulWidget {

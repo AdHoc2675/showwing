@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:showwing/theme/font.dart';
 import 'package:showwing/photo/photolist.dart';
 
-import '../take_pictuer_page2.dart';
-import '../take_picture_page.dart';
+import '../image_and_camera/take_pictuer_page2.dart';
+import '../image_and_camera/take_picture_page.dart';
 
 class HwaminPage extends StatefulWidget {
   const HwaminPage({Key? key}) : super(key: key);

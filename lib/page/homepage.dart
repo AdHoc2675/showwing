@@ -5,8 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:showwing/theme/font.dart';
 
 import '../photo/photolist.dart';
-import '../image_edit_page.dart';
-import '../take_picture_page.dart';
+import '../image_and_camera/image_edit_page.dart';
+import '../image_and_camera/take_picture_page.dart';
 import 'package:showwing/photo/mainlist.dart';
 
 class MainPage extends StatefulWidget {

@@ -5,12 +5,13 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:showwing/remove_bg_api_client..dart';
+import 'package:photofilters/utils/convolution_kernels.dart';
+import 'package:showwing/image_and_camera/remove_bg_api_client..dart';
 
-import 'main.dart';
-import 'page/homepage.dart';
-import 'theme/color_schemes.dart';
-import 'theme/font.dart';
+import '../main.dart';
+import '../page/homepage.dart';
+import '../theme/color_schemes.dart';
+import '../theme/font.dart';
 import 'image_edit_page.dart';
 
 class TakePicturePage extends StatefulWidget {
@@ -49,6 +50,13 @@ class TakePicturePageState extends State<TakePicturePage>
 
   double _currentImageOpacity = 0.5;
 
+  late final List<bool> _selectedModes = <bool>[
+    false, // isResolutionSelectModeOn
+    false, // isImageInvisibleAndOpacitySelectModeOn
+    false, // isBrightnessSelectModeOn
+    false, // isFlashSelectModeOn
+  ];
+
   Future getImage(ImageSource imageSource) async {
     try {
       final pickedImage = await picker.pickImage(source: imageSource);
@@ -57,7 +65,6 @@ class TakePicturePageState extends State<TakePicturePage>
             File(pickedImage.path); // 가져온 이미지를 _imageFromGallery에 저장
         imagePathAsString = pickedImage.path;
         imageAsUint8List = await pickedImage.readAsBytes();
-        ;
       }
     } catch (e) {
       imageAsUint8List = null;
@@ -193,19 +200,19 @@ class TakePicturePageState extends State<TakePicturePage>
   Widget CameraBrightnessController() {
     return Column(
       children: [
-        // Container(
-        //   decoration: BoxDecoration(
-        //     color: Colors.white,
-        //     borderRadius: BorderRadius.circular(10.0),
-        //   ),
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(8.0),
-        //     child: Text(
-        //       _currentExposureOffset.toStringAsFixed(1) + 'x',
-        //       style: TextStyle(color: Colors.black),
-        //     ),
-        //   ),
-        // ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              _currentExposureOffset.toStringAsFixed(1) + 'x',
+              style: TextStyle(color: Colors.black),
+            ),
+          ),
+        ),
         RotatedBox(
           quarterTurns: 3,
           child: Container(
@@ -447,16 +454,34 @@ class TakePicturePageState extends State<TakePicturePage>
           },
         ),
         actions: [
-          //TODO: CameraResolutionController
-          IconButton(
-              onPressed: () {
-                CameraResolutionController();
-              },
-              icon: Icon(Icons.high_quality_outlined)),
-          //TODO: ImageInvisibleAndOpacityController
-          IconButton(onPressed: () {}, icon: Icon(Icons.opacity)),
-          //TODO: Camera Flash Controller
-          IconButton(onPressed: () {}, icon: Icon(Icons.flash_on)),
+          ToggleButtons(
+            children: [
+              Icon(Icons.high_quality_outlined),
+              Icon(Icons.opacity),
+              Icon(Icons.brightness_medium),
+              Icon(Icons.flash_on)
+            ],
+            isSelected: _selectedModes,
+            onPressed: (index) {
+              setState(() {
+                if (_selectedModes[index] == true) {
+                  print("a");
+                  _selectedModes[index] = !_selectedModes[index];
+                } else {
+                  print("b");
+                  for (int i = 0; i < _selectedModes.length; i++) {
+                    _selectedModes[i] = (i == index);
+                  }
+                }
+              });
+            },
+            borderRadius: BorderRadius.zero,
+            selectedBorderColor: Colors.transparent,
+            borderColor: Colors.transparent,
+            selectedColor: Colors.amber,
+            fillColor: Colors.transparent,
+          ),
+
           // Camera Front-Rear Controller
           IconButton(
             icon: const Icon(Icons.flip_camera_ios_outlined),
@@ -517,12 +542,16 @@ class TakePicturePageState extends State<TakePicturePage>
                                           child: CameraPreview(controller!))),
 
                                   //Camera Brightness Controller
-                                  CameraBrightnessController(),
+                                  _selectedModes[2]
+                                      ? CameraBrightnessController()
+                                      : Container(),
                                 ],
                               ),
 
                               // Camera Resolution Controller
-                              CameraResolutionController(),
+                              _selectedModes[0]
+                                  ? CameraResolutionController()
+                                  : Container(),
                             ],
                           ),
                           showImage(),
@@ -544,10 +573,14 @@ class TakePicturePageState extends State<TakePicturePage>
                             ),
                           ),
                           // Image Invisible And Opacity Controller
-                          ImageInvisibleAndOpacityController(),
+                          _selectedModes[1]
+                              ? ImageInvisibleAndOpacityController()
+                              : Container(),
 
                           // Camera Flash Controller
-                          CameraFlashController(),
+                          _selectedModes[3]
+                              ? CameraFlashController()
+                              : Container(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.center,
