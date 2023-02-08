@@ -9,6 +9,7 @@ import 'package:photofilters/photofilters.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:intl/intl.dart';
 
+import 'color_filter_generator.dart';
 import 'image_save_page.dart';
 import '../page/homepage.dart';
 
@@ -33,12 +34,327 @@ class ImageEditPageState extends State<ImageEditPage> {
 
   File? _image;
 
+  int selectedMode = 0; // 0: 미선택, 1: 필터 선택, 2: 편집 선택
+  int selectedEditMode =
+      0; // 0: 미선택, 1: brightness 선택 2: saturation 선택 3: hue 선택
+
+  double _minAvailableBrightnessOffset = 0.0;
+  double _maxAvailableBrightnessOffset = 1.0;
+  double _currentBrightnessOffset = 0.0;
+
+  double _minAvailableSaturationOffset = 0.0;
+  double _maxAvailableSaturationOffset = 1.0;
+  double _currentSaturationOffset = 0.0;
+
+  double _minAvailableHueOffset = 0.0;
+  double _maxAvailableHueOffset = 1.0;
+  double _currentHueOffset = 0.0;
+
   Future getImage(ImageSource imageSource) async {
     final image = await ImagePicker().pickImage(source: imageSource);
 
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
     });
+  }
+
+  late final List<bool> _selectedColorFilter = <bool>[
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ];
+
+  List colorFilterList = [
+    ColorFilter.mode(Colors.black, BlendMode.color),
+    ColorFilter.mode(Colors.white, BlendMode.color),
+    ColorFilter.mode(Colors.red, BlendMode.color),
+    ColorFilter.mode(Colors.orange, BlendMode.color),
+    ColorFilter.mode(Colors.yellow, BlendMode.color),
+    ColorFilter.mode(Colors.green, BlendMode.color),
+    ColorFilter.mode(Colors.blue, BlendMode.color),
+    ColorFilter.mode(Colors.indigo, BlendMode.color),
+    ColorFilter.mode(Colors.purple, BlendMode.color),
+  ];
+
+  List colorFilterTextList = [
+    'black',
+    'white',
+    'red',
+    'orange',
+    'yellow',
+    'green',
+    'blue',
+    'indigo',
+    'purple'
+  ];
+
+  Widget ImageFilter({brightness, saturation, hue, child}) {
+    return ColorFiltered(
+        colorFilter:
+            ColorFilter.matrix(ColorFilterGenerator.brightnessAdjustMatrix(
+          value: brightness,
+        )),
+        child: ColorFiltered(
+            colorFilter:
+                ColorFilter.matrix(ColorFilterGenerator.saturationAdjustMatrix(
+              value: saturation,
+            )),
+            child: ColorFiltered(
+              colorFilter:
+                  ColorFilter.matrix(ColorFilterGenerator.hueAdjustMatrix(
+                value: hue,
+              )),
+              child: child,
+            )));
+  }
+
+  Widget imageEditSelector(BuildContext context) {
+    // 이미지 편집창을 총괄하는 위젯
+    if (selectedMode == 0) {
+      // 미선택
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                selectedMode = 1;
+              });
+            },
+            child: Column(
+              children: [
+                Text("필터"),
+                Icon(Icons.color_lens),
+              ],
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                selectedMode = 2;
+              });
+            },
+            child: Column(
+              children: [
+                Text("수정"),
+                Icon(Icons.imagesearch_roller),
+              ],
+            ),
+          )
+        ],
+      );
+    } else if (selectedMode == 1) {
+      // 1: 필터 선택
+      return ListView.builder(
+        itemCount: _selectedColorFilter.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: ((context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: InkWell(
+              onTap: () {},
+              child: Column(
+                children: [
+                  Text(colorFilterTextList[index]),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.width / 8,
+                    width: MediaQuery.of(context).size.width / 8,
+                    child: ColorFiltered(
+                      colorFilter: colorFilterList[index],
+                      child: Image.file(
+                        File(imagePath),
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }),
+      );
+    } else if (selectedMode == 2) {
+      // 2: 편집 선택
+      if (selectedEditMode == 0) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            InkWell(
+              onTap: () {
+                setState(() {
+                  selectedEditMode = 1;
+                });
+              },
+              child: Column(
+                children: [
+                  Text("Brightness"),
+                  Icon(Icons.brightness_6),
+                ],
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  selectedEditMode = 2;
+                });
+              },
+              child: Column(
+                children: [
+                  Text("saturation"),
+                  Icon(Icons.hub_rounded),
+                ],
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  selectedEditMode = 3;
+                });
+              },
+              child: Column(
+                children: [
+                  Text("hue"),
+                  Icon(Icons.hub_outlined),
+                ],
+              ),
+            ),
+          ],
+        );
+      } else if (selectedEditMode == 1) {
+        // 밝기 조절
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    selectedEditMode = 0;
+                  });
+                },
+                icon: Icon(Icons.arrow_back)),
+            Expanded(
+              child: Slider(
+                value: _currentBrightnessOffset,
+                min: _minAvailableBrightnessOffset,
+                max: _maxAvailableBrightnessOffset,
+                activeColor: Colors.white,
+                inactiveColor: Colors.white30,
+                onChanged: (value) async {
+                  setState(() {
+                    _currentBrightnessOffset = value;
+                  });
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  _currentBrightnessOffset.toStringAsFixed(1) + 'x',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+          ],
+        );
+      } else if (selectedEditMode == 2) {
+        // saturation 조절
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    selectedEditMode = 0;
+                  });
+                },
+                icon: Icon(Icons.arrow_back)),
+            Expanded(
+              child: Slider(
+                value: _currentSaturationOffset,
+                min: _minAvailableSaturationOffset,
+                max: _maxAvailableSaturationOffset,
+                activeColor: Colors.white,
+                inactiveColor: Colors.white30,
+                onChanged: (value) async {
+                  setState(() {
+                    _currentSaturationOffset = value;
+                  });
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  _currentBrightnessOffset.toStringAsFixed(1) + 'x',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+          ],
+        );
+      } else if (selectedEditMode == 3) {
+        // hue 조절
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    selectedEditMode = 0;
+                  });
+                },
+                icon: Icon(Icons.arrow_back)),
+            Expanded(
+              child: Slider(
+                value: _currentHueOffset,
+                min: _minAvailableHueOffset,
+                max: _maxAvailableHueOffset,
+                activeColor: Colors.white,
+                inactiveColor: Colors.white30,
+                onChanged: (value) async {
+                  setState(() {
+                    _currentHueOffset = value;
+                  });
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  _currentBrightnessOffset.toStringAsFixed(1) + 'x',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+            ),
+          ],
+        );
+      } else {
+        return Text("ERROR");
+      }
+    } else {
+      return Text("ERROR");
+    }
   }
 
   @override
@@ -97,193 +413,9 @@ class ImageEditPageState extends State<ImageEditPage> {
             child: Image.file(File(imagePath)),
           )),
           SizedBox(
-            height: MediaQuery.of(context).size.height / 9,
-            width: MediaQuery.of(context).size.width - 50,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Selfie",
-                          style: Noto_Label_Large(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 8,
-                          width: MediaQuery.of(context).size.width / 8,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Sea",
-                          style: Noto_Label_Large(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 8,
-                          width: MediaQuery.of(context).size.width / 8,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Mood",
-                          style: Noto_Label_Large(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 8,
-                          width: MediaQuery.of(context).size.width / 8,
-                          child: ColorFiltered(
-                            colorFilter:
-                                ColorFilter.mode(Colors.black, BlendMode.color),
-                            child: Image.file(
-                              File(imagePath),
-                              fit: BoxFit.fitWidth,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Natuer",
-                          style: Noto_Label_Large(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 8,
-                          width: MediaQuery.of(context).size.width / 8,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Insta",
-                          style: Noto_Label_Large(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 8,
-                          width: MediaQuery.of(context).size.width / 8,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Example",
-                          style: Noto_Label_Large(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 8,
-                          width: MediaQuery.of(context).size.width / 8,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          "Example2",
-                          style: Noto_Label_Large(),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: SizedBox(
-                          height: MediaQuery.of(context).size.width / 8,
-                          width: MediaQuery.of(context).size.width / 8,
-                          child: Image.file(
-                            File(imagePath),
-                            fit: BoxFit.fitWidth,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+              height: MediaQuery.of(context).size.height / 11,
+              width: MediaQuery.of(context).size.width - 50,
+              child: imageEditSelector(context)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,

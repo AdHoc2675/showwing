@@ -270,30 +270,6 @@ class TakePicturePageState extends State<TakePicturePage>
   Widget ImageInvisibleAndOpacityController() {
     return Column(
       children: [
-        InkWell(
-            onTap: () {
-              setState(() {
-                isImageInvisible = !isImageInvisible;
-              });
-            },
-            hoverColor: Colors.transparent,
-            onHover: (value) {
-              setState(() {
-                isImageInvisible = value;
-              });
-              print(isImageInvisible);
-            },
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.circle,
-                  color: Colors.white60,
-                  size: 60,
-                ),
-                Image.asset('assets/images/reset_image.png'),
-              ],
-            )),
         Row(
           children: [
             Expanded(
@@ -325,6 +301,30 @@ class TakePicturePageState extends State<TakePicturePage>
             ),
           ],
         ),
+        InkWell(
+            onTap: () {
+              setState(() {
+                isImageInvisible = !isImageInvisible;
+              });
+            },
+            hoverColor: Colors.transparent,
+            onHover: (value) {
+              setState(() {
+                isImageInvisible = value;
+              });
+              print(isImageInvisible);
+            },
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  Icons.circle,
+                  color: Colors.white60,
+                  size: 60,
+                ),
+                Image.asset('assets/images/reset_image.png'),
+              ],
+            )),
       ],
     );
   }
@@ -455,12 +455,6 @@ class TakePicturePageState extends State<TakePicturePage>
         ),
         actions: [
           ToggleButtons(
-            children: [
-              Icon(Icons.high_quality_outlined),
-              Icon(Icons.opacity),
-              Icon(Icons.brightness_medium),
-              Icon(Icons.flash_on)
-            ],
             isSelected: _selectedModes,
             onPressed: (index) {
               setState(() {
@@ -480,6 +474,12 @@ class TakePicturePageState extends State<TakePicturePage>
             borderColor: Colors.transparent,
             selectedColor: Colors.amber,
             fillColor: Colors.transparent,
+            children: const [
+              Icon(Icons.high_quality_outlined),
+              Icon(Icons.opacity),
+              Icon(Icons.brightness_medium),
+              Icon(Icons.flash_on)
+            ],
           ),
 
           // Camera Front-Rear Controller
@@ -507,161 +507,176 @@ class TakePicturePageState extends State<TakePicturePage>
                     alignment: AlignmentDirectional.bottomEnd,
                     children: [
                       Stack(
-                        alignment: AlignmentDirectional.center,
+                        alignment: AlignmentDirectional.topEnd,
                         children: [
                           Stack(
-                            alignment: AlignmentDirectional.topEnd,
+                            alignment: AlignmentDirectional.center,
                             children: [
                               Stack(
-                                alignment: AlignmentDirectional.centerEnd,
+                                alignment: AlignmentDirectional.topEnd,
                                 children: [
-                                  // Camera Zoom Controller
-                                  GestureDetector(
-                                      onScaleStart: (details) {},
-                                      onScaleUpdate: (details) async {
-                                        setState(() {
-                                          if (_currentZoomLevel >
-                                                  _minAvailableZoom &&
-                                              _currentZoomLevel <
-                                                  _maxAvailableZoom) {
-                                            if (details.scale > 1 &&
-                                                _currentZoomLevel < 7.975) {
-                                              _currentZoomLevel =
-                                                  _currentZoomLevel + 0.025;
-                                            } else if (_currentZoomLevel >
-                                                1.025) {
-                                              _currentZoomLevel =
-                                                  _currentZoomLevel - 0.025;
-                                            }
-                                          }
-                                        });
-                                        await controller!
-                                            .setZoomLevel(_currentZoomLevel);
-                                      },
-                                      child: SizedBox(
-                                          child: CameraPreview(controller!))),
+                                  Stack(
+                                    alignment: AlignmentDirectional.centerEnd,
+                                    children: [
+                                      // Camera Zoom Controller
+                                      GestureDetector(
+                                          onScaleStart: (details) {},
+                                          onScaleUpdate: (details) async {
+                                            setState(() {
+                                              if (_currentZoomLevel >
+                                                      _minAvailableZoom &&
+                                                  _currentZoomLevel <
+                                                      _maxAvailableZoom) {
+                                                if (details.scale > 1 &&
+                                                    _currentZoomLevel < 7.975) {
+                                                  _currentZoomLevel =
+                                                      _currentZoomLevel + 0.025;
+                                                } else if (_currentZoomLevel >
+                                                    1.025) {
+                                                  _currentZoomLevel =
+                                                      _currentZoomLevel - 0.025;
+                                                }
+                                              }
+                                            });
+                                            await controller!.setZoomLevel(
+                                                _currentZoomLevel);
+                                          },
+                                          child: SizedBox(
+                                              child:
+                                                  CameraPreview(controller!))),
 
-                                  //Camera Brightness Controller
-                                  _selectedModes[2]
-                                      ? CameraBrightnessController()
+                                      //Camera Brightness Controller
+                                      _selectedModes[2]
+                                          ? CameraBrightnessController()
+                                          : Container(),
+                                    ],
+                                  ),
+
+                                  // Camera Resolution Controller
+                                  _selectedModes[0]
+                                      ? CameraResolutionController()
                                       : Container(),
                                 ],
                               ),
+                              showImage(),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    _currentZoomLevel.toStringAsFixed(1) + 'x',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
+                              // Image Invisible And Opacity Controller
+                              _selectedModes[1]
+                                  ? ImageInvisibleAndOpacityController()
+                                  : Container(),
 
-                              // Camera Resolution Controller
-                              _selectedModes[0]
-                                  ? CameraResolutionController()
+                              // Camera Flash Controller
+                              _selectedModes[3]
+                                  ? CameraFlashController()
                                   : Container(),
                             ],
                           ),
-                          showImage(),
                         ],
                       ),
-                      Column(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                _currentZoomLevel.toStringAsFixed(1) + 'x',
-                                style: TextStyle(color: Colors.black),
-                              ),
+                          InkWell(
+                            onTap: () async {
+                              await getImage(ImageSource.gallery)
+                                  .then((value) => null);
+                              imageAsUint8List = await RemoveBGApiClient()
+                                  .removeBgApi(imagePathAsString!);
+                              setState(() {
+                                isSilhouetteModeOn = true;
+                                isImageInvisible = true;
+                              });
+                              print(isImageInvisible);
+                            },
+                            child: Stack(
+                              alignment: AlignmentDirectional.center,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  color: Colors.black45,
+                                  size: 60,
+                                ),
+                                Icon(
+                                  Icons.image,
+                                  color: Colors.white,
+                                ),
+                              ],
                             ),
                           ),
-                          // Image Invisible And Opacity Controller
-                          _selectedModes[1]
-                              ? ImageInvisibleAndOpacityController()
-                              : Container(),
+                          InkWell(
+                            onTap: () async {
+                              // Take the Picture in a try / catch block. If anything goes wrong,
+                              // catch the error.
+                              try {
+                                // Ensure that the camera is initialized.
 
-                          // Camera Flash Controller
-                          _selectedModes[3]
-                              ? CameraFlashController()
-                              : Container(),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  await getImage(ImageSource.gallery)
-                                      .then((value) => null);
-                                  imageAsUint8List = await RemoveBGApiClient()
-                                      .removeBgApi(imagePathAsString!);
-                                  setState(() {
-                                    isSilhouetteModeOn = true;
-                                    isImageInvisible = true;
-                                  });
-                                  print(isImageInvisible);
-                                },
-                                child: Stack(
-                                  alignment: AlignmentDirectional.center,
-                                  children: [
-                                    Icon(
-                                      Icons.circle,
-                                      color: Colors.black45,
-                                      size: 60,
+                                // Attempt to take a picture and get the file `image`
+                                // where it was saved.
+                                final image = await controller!.takePicture();
+
+                                if (!mounted) return;
+
+                                controller!.setFlashMode(FlashMode.off);
+
+                                // If the picture was taken, display it on a new screen.
+                                await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ImageEditPage(
+                                      // Pass the automatically generated path to
+                                      // the DisplayPictureScreen widget.
+                                      imagePath: image.path,
                                     ),
-                                    Icon(
-                                      Icons.image,
-                                      color: Colors.white,
-                                    ),
-                                  ],
+                                  ),
+                                );
+                              } catch (e) {
+                                // If an error occurs, log the error to the console.
+                                print(e);
+                              }
+                            },
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  color: Colors.white60,
+                                  size: 85,
                                 ),
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  // Take the Picture in a try / catch block. If anything goes wrong,
-                                  // catch the error.
-                                  try {
-                                    // Ensure that the camera is initialized.
-
-                                    // Attempt to take a picture and get the file `image`
-                                    // where it was saved.
-                                    final image =
-                                        await controller!.takePicture();
-
-                                    if (!mounted) return;
-
-                                    controller!.setFlashMode(FlashMode.off);
-
-                                    // If the picture was taken, display it on a new screen.
-                                    await Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => ImageEditPage(
-                                          // Pass the automatically generated path to
-                                          // the DisplayPictureScreen widget.
-                                          imagePath: image.path,
-                                        ),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    // If an error occurs, log the error to the console.
-                                    print(e);
-                                  }
-                                },
-                                child: Icon(
+                                Icon(
                                   Icons.circle,
                                   color: Colors.black45,
                                   size: 75,
                                 ),
-                              ),
-                              InkWell(
-                                  onTap: () {
-                                    Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                MainPage()),
-                                        (route) => false);
-                                  },
-                                  child: Image.asset(
-                                      'assets/images/showwing_logo.png')),
-                            ],
+                              ],
+                            ),
                           ),
+                          InkWell(
+                              onTap: () {
+                                Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            MainPage()),
+                                    (route) => false);
+                              },
+                              child: Image.asset(
+                                  'assets/images/showwing_logo.png')),
                         ],
                       ),
                     ],
