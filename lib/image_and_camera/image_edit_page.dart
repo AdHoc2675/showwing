@@ -71,8 +71,8 @@ class ImageEditPageState extends State<ImageEditPage> {
   ];
 
   List colorFilterList = [
+    ColorFilter.mode(Colors.transparent, BlendMode.dstOver),
     ColorFilter.mode(Colors.black, BlendMode.color),
-    ColorFilter.mode(Colors.white, BlendMode.color),
     ColorFilter.mode(Colors.red, BlendMode.color),
     ColorFilter.mode(Colors.orange, BlendMode.color),
     ColorFilter.mode(Colors.yellow, BlendMode.color),
@@ -83,8 +83,8 @@ class ImageEditPageState extends State<ImageEditPage> {
   ];
 
   List colorFilterTextList = [
+    'none',
     'black',
-    'white',
     'red',
     'orange',
     'yellow',
@@ -93,6 +93,8 @@ class ImageEditPageState extends State<ImageEditPage> {
     'indigo',
     'purple'
   ];
+
+  int selectedColorFilter = 0;
 
   Widget ImageFilter({brightness, saturation, hue, child}) {
     return ColorFiltered(
@@ -152,13 +154,18 @@ class ImageEditPageState extends State<ImageEditPage> {
     } else if (selectedMode == 1) {
       // 1: 필터 선택
       return ListView.builder(
-        itemCount: _selectedColorFilter.length,
+        itemCount: colorFilterList.length,
         scrollDirection: Axis.horizontal,
         itemBuilder: ((context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                setState(() {
+                  selectedMode = 0;
+                  selectedColorFilter = index;
+                });
+              },
               child: Column(
                 children: [
                   Text(colorFilterTextList[index]),
@@ -185,6 +192,19 @@ class ImageEditPageState extends State<ImageEditPage> {
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            InkWell(
+              onTap: () {
+                setState(() {
+                  selectedMode = 0;
+                });
+              },
+              child: Column(
+                children: [
+                  Text("Back"),
+                  Icon(Icons.arrow_back),
+                ],
+              ),
+            ),
             InkWell(
               onTap: () {
                 setState(() {
@@ -410,7 +430,14 @@ class ImageEditPageState extends State<ImageEditPage> {
           Container(
               child: Padding(
             padding: const EdgeInsets.only(left: 35.0, right: 35.0, bottom: 10),
-            child: Image.file(File(imagePath)),
+            child: ImageFilter(
+              brightness: _currentBrightnessOffset,
+              saturation: _currentSaturationOffset,
+              hue: _currentHueOffset,
+              child: ColorFiltered(
+                  colorFilter: colorFilterList[selectedColorFilter],
+                  child: Image.file(File(imagePath))),
+            ),
           )),
           SizedBox(
               height: MediaQuery.of(context).size.height / 11,
