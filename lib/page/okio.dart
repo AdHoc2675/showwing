@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:showwing/photo/photolist.dart';
-import 'package:showwing/theme/font.dart';
+import 'package:showing/photo/photolist.dart';
+import 'package:showing/theme/font.dart';
 
-import '../take_picture_page.dart';
+import '../image_and_camera/take_picture_page.dart';
 
 class OkioPage extends StatefulWidget {
   const OkioPage({Key? key}) : super(key: key);

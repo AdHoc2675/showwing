@@ -5,9 +5,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
-import 'package:showwing/theme/font.dart';
+import 'package:showing/theme/font.dart';
 
-import 'page/homepage.dart';
+import '../page/homepage.dart';
 
 class ImageSavePage extends StatefulWidget {
   const ImageSavePage(

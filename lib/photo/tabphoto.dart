@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:showwing/theme/font.dart';
+import 'package:showing/theme/font.dart';
 
 class tabphoto2 extends StatefulWidget {
   const tabphoto2({Key? key}) : super(key: key);

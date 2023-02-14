@@ -1,4 +1,4 @@
-# showwing
+# showing
 
 A new Flutter project.
 
