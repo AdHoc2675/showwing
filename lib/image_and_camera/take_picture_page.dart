@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photofilters/utils/convolution_kernels.dart';
-import 'package:showwing/image_and_camera/remove_bg_api_client..dart';
+import 'package:showing/image_and_camera/remove_bg_api_client..dart';
 
 import '../main.dart';
 import '../page/homepage.dart';
@@ -676,7 +676,7 @@ class TakePicturePageState extends State<TakePicturePage>
                                     (route) => false);
                               },
                               child: Image.asset(
-                                  'assets/images/showwing_logo.png')),
+                                  'assets/images/showing_logo.png')),
                         ],
                       ),
                     ],

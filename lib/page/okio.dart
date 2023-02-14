@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:showwing/photo/photolist.dart';
-import 'package:showwing/theme/font.dart';
+import 'package:showing/photo/photolist.dart';
+import 'package:showing/theme/font.dart';
 
 import '../image_and_camera/take_picture_page.dart';
 

@@ -532,7 +532,7 @@ class TakePicturePage2State extends State<TakePicturePage2>
                                       MainPage()),
                               (route) => false);
                         },
-                        child: Image.asset('assets/images/showwing_logo.png')),
+                        child: Image.asset('assets/images/showing_logo.png')),
                   ],
                 ),
               ],

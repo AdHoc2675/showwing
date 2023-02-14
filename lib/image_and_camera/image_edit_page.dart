@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gallery_saver/gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart' as impk;
 import 'package:path/path.dart';
-import 'package:showwing/theme/font.dart';
+import 'package:showing/theme/font.dart';
 import 'package:photofilters/photofilters.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:intl/intl.dart';
+import 'package:image_editor/image_editor.dart' as imed;
 
 import 'color_filter_generator.dart';
 import 'image_save_page.dart';
@@ -50,8 +51,8 @@ class ImageEditPageState extends State<ImageEditPage> {
   double _maxAvailableHueOffset = 1.0;
   double _currentHueOffset = 0.0;
 
-  Future getImage(ImageSource imageSource) async {
-    final image = await ImagePicker().pickImage(source: imageSource);
+  Future getImage(impk.ImageSource imageSource) async {
+    final image = await impk.ImagePicker().pickImage(source: imageSource);
 
     setState(() {
       _image = File(image!.path); // 가져온 이미지를 _image에 저장
@@ -449,7 +450,7 @@ class ImageEditPageState extends State<ImageEditPage> {
             children: [
               InkWell(
                 onTap: () async {
-                  getImage(ImageSource.gallery);
+                  getImage(impk.ImageSource.gallery);
                 },
                 child: Stack(
                   alignment: AlignmentDirectional.center,
@@ -480,7 +481,7 @@ class ImageEditPageState extends State<ImageEditPage> {
                             builder: (BuildContext context) => MainPage()),
                         (route) => false);
                   },
-                  child: Image.asset('assets/images/showwing_logo.png')),
+                  child: Image.asset('assets/images/showing_logo.png')),
             ],
           ),
         ],
