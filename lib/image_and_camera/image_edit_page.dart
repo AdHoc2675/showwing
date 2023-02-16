@@ -8,7 +8,6 @@ import 'package:showing/theme/font.dart';
 import 'package:photofilters/photofilters.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:intl/intl.dart';
-import 'package:image_editor/image_editor.dart' as imed;
 
 import 'color_filter_generator.dart';
 import 'image_save_page.dart';
@@ -35,9 +34,9 @@ class ImageEditPageState extends State<ImageEditPage> {
 
   File? _image;
 
-  int selectedMode = 0; // 0: 미선택, 1: 필터 선택, 2: 편집 선택
+  int selectedMode = 0; // 0: 미선택, 1: 필터 선택, 2: 편집 선택, 3: crop 선택
   int selectedEditMode =
-      0; // 0: 미선택, 1: brightness 선택 2: saturation 선택 3: hue 선택
+      0; // selectedMode가 2일때, 0: 미선택, 1: brightness 선택 2: saturation 선택 3: hue 선택
 
   double _minAvailableBrightnessOffset = 0.0;
   double _maxAvailableBrightnessOffset = 1.0;
@@ -149,7 +148,20 @@ class ImageEditPageState extends State<ImageEditPage> {
                 Icon(Icons.imagesearch_roller),
               ],
             ),
-          )
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                selectedMode = 3;
+              });
+            },
+            child: Column(
+              children: [
+                Text("컷팅"),
+                Icon(Icons.crop),
+              ],
+            ),
+          ),
         ],
       );
     } else if (selectedMode == 1) {
@@ -373,6 +385,8 @@ class ImageEditPageState extends State<ImageEditPage> {
       } else {
         return Text("ERROR");
       }
+    } else if (selectedMode == 3) {
+      return Container();
     } else {
       return Text("ERROR");
     }
