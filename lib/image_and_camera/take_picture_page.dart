@@ -445,59 +445,40 @@ class TakePicturePageState extends State<TakePicturePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         toolbarHeight: 60.0,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          ToggleButtons(
-            isSelected: _selectedModes,
-            onPressed: (index) {
-              setState(() {
-                if (_selectedModes[index] == true) {
-                  print("a");
-                  _selectedModes[index] = !_selectedModes[index];
-                } else {
-                  print("b");
-                  for (int i = 0; i < _selectedModes.length; i++) {
-                    _selectedModes[i] = (i == index);
-                  }
+        title: ToggleButtons(
+          isSelected: _selectedModes,
+          onPressed: (index) {
+            setState(() {
+              if (_selectedModes[index] == true) {
+                print("a");
+                _selectedModes[index] = !_selectedModes[index];
+              } else {
+                print("b");
+                for (int i = 0; i < _selectedModes.length; i++) {
+                  _selectedModes[i] = (i == index);
                 }
-              });
-            },
-            borderRadius: BorderRadius.zero,
-            selectedBorderColor: Colors.transparent,
-            borderColor: Colors.transparent,
-            selectedColor: Colors.amber,
-            fillColor: Colors.transparent,
-            children: const [
-              Icon(Icons.high_quality_outlined),
-              Icon(Icons.opacity),
-              Icon(Icons.brightness_medium),
-              Icon(Icons.flash_on)
-            ],
-          ),
+              }
+            });
+          },
+          borderRadius: BorderRadius.zero,
+          selectedBorderColor: Colors.transparent,
+          borderColor: Colors.transparent,
+          selectedColor: Colors.amber,
+          fillColor: Colors.transparent,
+          borderWidth: MediaQuery.of(context).size.width / 15,
+          children: const [
+            Icon(Icons.high_quality_outlined),
+            Icon(Icons.opacity),
+            Icon(Icons.brightness_medium),
+            Icon(Icons.flash_on)
+          ],
+        ),
 
-          // Camera Front-Rear Controller
-          IconButton(
-            icon: const Icon(Icons.flip_camera_ios_outlined),
-            onPressed: () async {
-              setState(() {
-                _isCameraInitialized = false;
-              });
-              onNewCameraSelected(
-                cameras[_isRearCameraSelected ? 1 : 0],
-              );
-              setState(() {
-                _isRearCameraSelected = !_isRearCameraSelected;
-              });
-            },
-          )
-        ],
+        // Camera Front-Rear Controller
       ),
       body: _isCameraInitialized
           ? Center(
@@ -516,39 +497,60 @@ class TakePicturePageState extends State<TakePicturePage>
                                 alignment: AlignmentDirectional.topEnd,
                                 children: [
                                   Stack(
-                                    alignment: AlignmentDirectional.centerEnd,
+                                    alignment: AlignmentDirectional.topStart,
                                     children: [
-                                      // Camera Zoom Controller
-                                      GestureDetector(
-                                          onScaleStart: (details) {},
-                                          onScaleUpdate: (details) async {
-                                            setState(() {
-                                              if (_currentZoomLevel >
-                                                      _minAvailableZoom &&
-                                                  _currentZoomLevel <
-                                                      _maxAvailableZoom) {
-                                                if (details.scale > 1 &&
-                                                    _currentZoomLevel < 7.975) {
-                                                  _currentZoomLevel =
-                                                      _currentZoomLevel + 0.025;
-                                                } else if (_currentZoomLevel >
-                                                    1.025) {
-                                                  _currentZoomLevel =
-                                                      _currentZoomLevel - 0.025;
-                                                }
-                                              }
-                                            });
-                                            await controller!.setZoomLevel(
-                                                _currentZoomLevel);
-                                          },
-                                          child: SizedBox(
-                                              child:
-                                                  CameraPreview(controller!))),
+                                      Stack(
+                                        alignment:
+                                            AlignmentDirectional.centerEnd,
+                                        children: [
+                                          // Camera Zoom Controller
+                                          GestureDetector(
+                                              onScaleStart: (details) {},
+                                              onScaleUpdate: (details) async {
+                                                setState(() {
+                                                  if (_currentZoomLevel >
+                                                          _minAvailableZoom &&
+                                                      _currentZoomLevel <
+                                                          _maxAvailableZoom) {
+                                                    if (details.scale > 1 &&
+                                                        _currentZoomLevel <
+                                                            7.975) {
+                                                      _currentZoomLevel =
+                                                          _currentZoomLevel +
+                                                              0.025;
+                                                    } else if (_currentZoomLevel >
+                                                        1.025) {
+                                                      _currentZoomLevel =
+                                                          _currentZoomLevel -
+                                                              0.025;
+                                                    }
+                                                  }
+                                                });
+                                                await controller!.setZoomLevel(
+                                                    _currentZoomLevel);
+                                              },
+                                              child: SizedBox(
+                                                  child: CameraPreview(
+                                                      controller!))),
 
-                                      //Camera Brightness Controller
-                                      _selectedModes[2]
-                                          ? CameraBrightnessController()
-                                          : Container(),
+                                          //Camera Brightness Controller
+                                          _selectedModes[2]
+                                              ? CameraBrightnessController()
+                                              : Container(),
+                                        ],
+                                      ),
+                                      OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              isSilhouetteModeOn =
+                                                  !isSilhouetteModeOn;
+                                            });
+                                          },
+                                          child: isSilhouetteModeOn
+                                              ? Text("Original",
+                                                  style: Noto_Body2_Large())
+                                              : Text("Outline",
+                                                  style: Noto_Body2_Large())),
                                     ],
                                   ),
 
@@ -610,12 +612,19 @@ class TakePicturePageState extends State<TakePicturePage>
                               children: [
                                 Icon(
                                   Icons.circle,
-                                  color: Colors.black45,
-                                  size: 60,
+                                  color: Colors.white70,
+                                  size: 80,
                                 ),
-                                Icon(
-                                  Icons.image,
-                                  color: Colors.white,
+                                Column(
+                                  children: [
+                                    Icon(
+                                      Icons.image,
+                                    ),
+                                    Text(
+                                      "Gallery",
+                                      style: Noto_Body2_Large(),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -655,7 +664,7 @@ class TakePicturePageState extends State<TakePicturePage>
                               children: [
                                 Icon(
                                   Icons.circle,
-                                  color: Colors.white60,
+                                  color: Colors.white70,
                                   size: 85,
                                 ),
                                 Icon(
@@ -667,16 +676,39 @@ class TakePicturePageState extends State<TakePicturePage>
                             ),
                           ),
                           InkWell(
-                              onTap: () {
-                                Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            MainPage()),
-                                    (route) => false);
+                              onTap: () async {
+                                setState(() {
+                                  _isCameraInitialized = false;
+                                });
+                                onNewCameraSelected(
+                                  cameras[_isRearCameraSelected ? 1 : 0],
+                                );
+                                setState(() {
+                                  _isRearCameraSelected =
+                                      !_isRearCameraSelected;
+                                });
                               },
-                              child: Image.asset(
-                                  'assets/images/showing_logo.png')),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.circle,
+                                    color: Colors.white70,
+                                    size: 80,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Icon(
+                                        Icons.change_circle,
+                                      ),
+                                      Text(
+                                        "Selfie",
+                                        style: Noto_Body2_Large(),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
                         ],
                       ),
                     ],
